@@ -77,7 +77,12 @@ export default {
 }
 
 .login-form{
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 55%;
+  margin: auto;
+  height: 100%
 }
 
 .main-image-register{
