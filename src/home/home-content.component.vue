@@ -18,6 +18,8 @@ export default {
       boost_products: [],
       errors: [],
       homeApi: new homeApiService(),
+      searchProduct: "",
+      selectedCategory: "" // Nueva propiedad para almacenar la categoría seleccionada
     }
   },
   created() {
@@ -25,9 +27,6 @@ export default {
     this.getAllProducts();
   },
   methods: {
-    showConfirmation() {
-      alert("Gracias papu");
-    },
     getAllProductCategories() {
       this.homeApi.getCategoriesProduct()
           .then((response) => {
@@ -44,7 +43,23 @@ export default {
             this.errors.push(error);
           });
     },
+    filterByCategory(categoryName) {
+      this.selectedCategory = categoryName;
+    },
   },
+  computed: {
+    filteredProducts() {
+      if (this.selectedCategory) {
+        return this.products.filter(product =>
+            product.category.name.toLowerCase().includes(this.selectedCategory.toLowerCase())
+        );
+      } else {
+        return this.products.filter(product =>
+            product.product_name.toLowerCase().includes(this.searchProduct.toLowerCase())
+        );
+      }
+    }
+  }
 }
 </script>
 
@@ -53,12 +68,11 @@ export default {
     <br>
     <br>
     <br>
-    <form @submit.prevent="showConfirmation" class="search-form">
-      <pv-input required class="input-search" placeholder="Buscar..."></pv-input>
-      <pv-button type="submit" class="b-search"><b>Envíar</b></pv-button>
-    </form>
+    <div class="search-form">
+      <pv-input v-model="searchProduct" class="input-search" placeholder="Buscar..."></pv-input>
+    </div>
     <div class="categories-container">
-      <categories-product :category_products="category_products"></categories-product>
+      <categories-product :category_products="category_products" @category-selected="filterByCategory"></categories-product>
     </div>
     <div class="boost-container">
       <div class="boost-container-slide">
@@ -72,7 +86,7 @@ export default {
       <h1>Últimos trueques publicados</h1>
     </div>
     <div class="products-container">
-      <product-list v-if="errors" :products="products"></product-list>
+      <product-list v-if="errors" :products="filteredProducts"></product-list>
     </div>
     <div class="more-products-container">
       <router-link to="/admin">
@@ -81,7 +95,6 @@ export default {
     </div>
   </div>
 </template>
-
 <style scoped>
 
 .search-form{
@@ -92,7 +105,7 @@ export default {
 }
 
 .input-search{
-  width: 90%;
+  width: 100%;
   padding: 0.5rem;
   border-radius: 10px;
   border: 1px solid #cccccc;
@@ -104,20 +117,6 @@ export default {
   outline: none;
 }
 
-.b-search{
-  background-color: #FFD146;
-  color: #000;
-  padding-right: 2rem;
-  padding-left: 2rem;
-  border-radius: 5px;
-  justify-content: center;
-  transition: 0.43s;
-}
-
-.b-search:hover{
-  background-color: #000;
-  color: #FFD146;
-}
 
 .categories-container {
   padding: 1rem 10rem 3rem 10rem;
