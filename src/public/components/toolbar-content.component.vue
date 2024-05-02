@@ -18,9 +18,11 @@ export default {
 <template>
   <pv-toolbar class="toolbar">
     <template #start>
-      <div>
-        <img src="../../../public/logo/cambiazo-logo.png" height="45" width="220"/>
-      </div>
+      <router-link to="/admin">
+        <div>
+          <img src="../../../public/logo/cambiazo-logo.png" height="45" width="220"/>
+        </div>
+      </router-link>
     </template>
     <template #center >
       <div class="center">
