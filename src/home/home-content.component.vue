@@ -75,7 +75,9 @@ export default {
       <product-list v-if="errors" :products="products"></product-list>
     </div>
     <div class="more-products-container">
-      <pv-button class="b-more-products">Ver más</pv-button>
+      <router-link to="/admin">
+        <pv-button class="b-more-products">Ver más</pv-button>
+      </router-link>
     </div>
   </div>
 </template>
