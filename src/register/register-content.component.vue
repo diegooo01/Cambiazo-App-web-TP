@@ -189,7 +189,7 @@ footer{
 
 @media (max-width: 960px){
 
-  .main-image{
+  .main-image-register{
     display: none;
   }
 
