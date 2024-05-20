@@ -88,7 +88,7 @@ export default {
       </div>
     </div>
     <div class="title-container">
-      <h1>Últimos trueques publicados</h1>
+      <h1>Últimos trueques publicadoss</h1>
     </div>
     <div class="products-container">
       <product-list v-if="filteredProducts.length" :products="filteredProducts"></product-list>
