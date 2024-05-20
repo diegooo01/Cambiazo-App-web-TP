@@ -19,7 +19,7 @@ export default {
       errors: [],
       homeApi: new homeApiService(),
       searchProduct: "",
-      selectedCategory: "" // Nueva propiedad para almacenar la categoría seleccionada
+      selectedCategory: ""
     }
   },
   created() {
@@ -32,12 +32,15 @@ export default {
           .then((response) => {
             this.category_products = response.data;
           })
+          .catch((error) => {
+            this.errors.push(error);
+          });
     },
     getAllProducts() {
       this.homeApi.getProduct()
           .then((response) => {
             this.products = response.data;
-            this.boost_products = response.data;
+            this.boost_products = response.data.filter(product => product.boost);
           })
           .catch((error) => {
             this.errors.push(error);
@@ -51,10 +54,12 @@ export default {
     filteredProducts() {
       if (this.selectedCategory) {
         return this.products.filter(product =>
+            product.category && product.category.name &&
             product.category.name.toLowerCase().includes(this.selectedCategory.toLowerCase())
         );
       } else {
         return this.products.filter(product =>
+            product.product_name &&
             product.product_name.toLowerCase().includes(this.searchProduct.toLowerCase())
         );
       }
@@ -72,7 +77,7 @@ export default {
       <pv-input v-model="searchProduct" class="input-search" placeholder="Buscar..."></pv-input>
     </div>
     <div class="categories-container">
-      <categories-product :category_products="category_products" @category-selected="filterByCategory"></categories-product>
+      <categories-product :category_products="category_products" @categorySelected="filterByCategory"></categories-product>
     </div>
     <div class="boost-container">
       <div class="boost-container-slide">
@@ -86,7 +91,7 @@ export default {
       <h1>Últimos trueques publicados</h1>
     </div>
     <div class="products-container">
-      <product-list v-if="errors" :products="filteredProducts"></product-list>
+      <product-list v-if="filteredProducts.length" :products="filteredProducts"></product-list>
     </div>
     <div class="more-products-container">
       <router-link to="/admin">
